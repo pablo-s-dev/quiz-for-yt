@@ -24,6 +24,10 @@
         const span = document.createElement("span");
         span.className = options.className || "as_icon";
         span.setAttribute("aria-hidden", "true");
+        // Force inline-flex display to prevent CSS overrides
+        span.style.display = "inline-flex";
+        span.style.alignItems = "center";
+        span.style.justifyContent = "center";
 
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("viewBox", options.viewBox || "0 0 24 24");

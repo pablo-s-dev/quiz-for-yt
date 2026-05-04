@@ -13,7 +13,7 @@ const I18N = {
     "en-US": {
         settings_title: "Settings",
         language_label: "Language",
-        language_system: "System",
+        language_system: "Browser language",
         mode_label: "Mode",
         mode_openai: "OpenAI API with my token",
         mode_chatgpt: "Automatic ChatGPT",
@@ -45,7 +45,7 @@ const I18N = {
     "pt-BR": {
         settings_title: "Configurações",
         language_label: "Idioma",
-        language_system: "Sistema",
+        language_system: "Idioma do navegador",
         mode_label: "Modo",
         mode_openai: "API OpenAI com meu token",
         mode_chatgpt: "ChatGPT automático",
