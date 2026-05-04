@@ -174,9 +174,6 @@ async function startChatGptQuizJob(message, sender) {
         return { ok: false, error: "Nao foi possivel abrir a aba do ChatGPT." };
     }
 
-    // Minimiza o popup imediatamente após abrir
-    setTimeout(() => minimizeChatGptPopup(popup.windowId), 1000);
-
     const job = {
         jobId: createJobId(),
         prompt: message.prompt,
