@@ -1,0 +1,7 @@
+Question: What is the function of the cell nucleus?
+Alternatives: 
+a) Storage and processing of proteins
+b) Production of ATP
+c) Contains the genetic material and controls cell activities
+d) Cell division and multiplication
+Answer: c) Contains the genetic material and controls cell activities

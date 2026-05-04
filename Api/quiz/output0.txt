@@ -1,0 +1,7 @@
+Question: Where is DNA primarily located within a eukaryotic cell?
+Alternatives: 
+A) Mitochondria
+B) Ribosomes
+C) Cytosol
+D) Nucleus
+Answer: D) Nucleus

@@ -1,0 +1,7 @@
+Question: Which organelle is also known as the "powerhouse" of the cell because it generates most of the cell's energy?
+Alternatives: 
+a) Ribosome
+b) Endoplasmic reticulum
+c) Nucleus
+d) Mitochondrion
+Answer: d) Mitochondrion
