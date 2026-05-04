@@ -75,7 +75,7 @@ ytd-app[dark] .activestudy_launch_btn {
 	flex-direction: column;
 	align-items: center;
 	width: min(420px, calc(100vw - 32px));
-	max-height: min(72vh, 680px);
+	max-height: min(90vh, 800px);
 	background-color: rgba(20, 20, 20, 1);
 	color: rgb(225, 225, 225);
 	text-align: left;
