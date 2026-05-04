@@ -9,7 +9,7 @@ AI-powered quiz generator for YouTube videos. Test your knowledge with automatic
 - **AI-Powered Quiz Generation**: Automatically creates multiple-choice questions from YouTube video transcripts
 - **Dual Generation Modes**:
   - OpenAI API (with your own API key)
-  - Automatic ChatGPT mode (uses your ChatGPT account)
+  - ChatGPT Popup mode (uses your ChatGPT account)
 - **Interactive Quiz Interface**: Clean, modern UI with smooth animations
 - **Keyboard Controls**: Full keyboard navigation support
   - Arrow keys (←/→) to navigate between questions
@@ -60,11 +60,11 @@ This creates a `quiz-for-youtube.zip` file ready for Chrome Web Store submission
 
 **Pricing**: Minimum $5 USD prepaid credits. With `gpt-4o-mini`, you can generate thousands of quizzes.
 
-### Using ChatGPT Mode (Free)
+### Using ChatGPT Popup (Free)
 
 1. Make sure you're logged into [ChatGPT](https://chatgpt.com)
 2. Click the extension icon
-3. Select "Automatic ChatGPT" mode
+3. Select "ChatGPT Popup" mode
 4. Create quizzes - the extension will automatically use ChatGPT
 
 ## ⌨️ Keyboard Shortcuts
@@ -163,7 +163,7 @@ Access history by clicking the extension icon.
 2. Make sure you're on a video page (`/watch?v=...`)
 3. Check if the video has captions/transcripts available
 
-### ChatGPT mode not working
+### ChatGPT Popup not working
 1. Make sure you're logged into ChatGPT
 2. Open [chatgpt.com](https://chatgpt.com) in a new tab first
 3. Try creating the quiz again

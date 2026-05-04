@@ -10,6 +10,8 @@
         "mdi:send": '<path fill="currentColor" d="M2 21l21-9L2 3v7l15 2l-15 2v7Z"/>',
         "mdi:chevron-left": '<path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12l4.58-4.59Z"/>',
         "mdi:chevron-right": '<path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6l-1.41 1.41L13.17 12l-4.58 4.59Z"/>',
+        "mdi:chevron-down": '<path fill="currentColor" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6l-6-6l1.41-1.41Z"/>',
+        "mdi:chevron-up": '<path fill="currentColor" d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6l-6 6l1.41 1.41Z"/>',
         "mdi:close": '<path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>',
         "mdi:content-save-outline": '<path fill="currentColor" d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4M12 19a3 3 0 1 1 0-6a3 3 0 0 1 0 6M6 8V5h9v3H6Z"/>',
         "mdi:delete-outline": '<path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12M8 9h8v10H8V9m7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5Z"/>',

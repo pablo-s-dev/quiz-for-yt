@@ -49,7 +49,7 @@ All data is stored **locally** in your browser using:
 
 **Your data never leaves your device** except when:
 1. You use OpenAI API mode (data sent directly to OpenAI)
-2. You use ChatGPT mode (data sent directly to ChatGPT)
+2. You use ChatGPT Popup (data sent directly to ChatGPT)
 
 ### No Remote Servers
 
@@ -71,7 +71,7 @@ If you choose to use OpenAI API mode:
 
 ### ChatGPT (Optional)
 
-If you choose to use ChatGPT mode:
+If you choose to use ChatGPT Popup:
 - The Extension automates your ChatGPT browser session
 - Video transcripts are sent directly to ChatGPT
 - OpenAI's privacy policy applies: https://openai.com/privacy

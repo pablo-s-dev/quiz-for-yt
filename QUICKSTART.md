@@ -44,7 +44,7 @@ Your quiz is saved automatically in history
 ### Free Mode (ChatGPT)
 1. Login to https://chatgpt.com
 2. Click extension icon
-3. Select "Automatic ChatGPT"
+3. Select "ChatGPT Popup"
 4. Done! ✅
 
 ### Paid Mode (OpenAI API)

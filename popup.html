@@ -7,16 +7,16 @@
     <title>Quiz for YouTube</title>
     <style>
         :root {
-            --as-bg: #f6f8fb;
-            --as-surface: #ffffff;
-            --as-border: #dce3eb;
-            --as-text: #111827;
-            --as-muted: #5f6f7c;
-            --as-primary: #1f6f8b;
-            --as-primary-hover: #2482a4;
-            --as-danger: #a63737;
-            --as-danger-hover: #bf4545;
-            --as-soft: #edf4f7;
+            --as-bg: #0f0f0f;
+            --as-surface: #1a1a1a;
+            --as-border: #2a2a2a;
+            --as-text: #e5e5e5;
+            --as-muted: #a0a0a0;
+            --as-primary: #2b9fc9;
+            --as-primary-hover: #3db3dd;
+            --as-danger: #e74c3c;
+            --as-danger-hover: #ff6b5a;
+            --as-soft: #252525;
             --as-navbar-height: 54px;
         }
 
@@ -54,7 +54,7 @@
 
         .quiz_official_icon {
             font-size: 24px;
-            color: #ffffff;
+            color: var(--as-primary);
         }
 
         .quiz_header {
@@ -70,7 +70,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 10px 12px;
-            background: rgba(246, 248, 251, 0.86);
+            background: rgba(15, 15, 15, 0.95);
             border-bottom: 1px solid var(--as-border);
             -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
@@ -87,7 +87,7 @@
             font-size: 15px;
             font-weight: 800;
             letter-spacing: -0.01em;
-            color: #101820;
+            color: var(--as-text);
             line-height: 1.1;
             white-space: nowrap;
             overflow: hidden;
@@ -108,7 +108,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: var(--as-text);
         }
 
         .navbar_close_btn {
@@ -118,17 +118,17 @@
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            border: 1px solid rgba(17, 24, 39, 0.08);
-            background: rgba(255, 255, 255, 0.72);
-            color: rgba(17, 24, 39, 0.78);
-            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--as-text);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
             cursor: pointer;
             transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
         }
 
         .navbar_close_btn:hover {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 10px 22px rgba(17, 24, 39, 0.14);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
         }
 
         .navbar_close_btn:active {
@@ -137,7 +137,7 @@
 
         .navbar_close_btn:focus-visible {
             outline: 0;
-            box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.22), 0 10px 22px rgba(17, 24, 39, 0.14);
+            box-shadow: 0 0 0 3px rgba(43, 159, 201, 0.3), 0 10px 22px rgba(0, 0, 0, 0.4);
         }
 
         .navbar_close_btn .as_button_icon svg {
@@ -154,7 +154,7 @@
         h1,
         h2 {
             margin: 0;
-            color: #101820;
+            color: var(--as-text);
         }
 
         h1 {
@@ -186,9 +186,18 @@
             width: 100%;
             height: 34px;
             padding: 7px;
-            border: 1px solid #c9d2dc;
+            border: 1px solid var(--as-border);
             border-radius: 6px;
             font-size: 13px;
+            background: var(--as-surface);
+            color: var(--as-text);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--as-primary);
+            box-shadow: 0 0 0 2px rgba(43, 159, 201, 0.2);
         }
 
         .button_row {
@@ -210,7 +219,7 @@
 
         .official_brand_icon {
             font-size: 22px;
-            color: #1f6f8b;
+            color: var(--as-primary);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -226,14 +235,14 @@
             background: var(--as-primary);
             color: #ffffff;
             font-weight: 700;
-            box-shadow: 0 6px 16px rgba(31, 111, 139, 0.16);
+            box-shadow: 0 6px 16px rgba(43, 159, 201, 0.2);
             transition: background 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
             white-space: nowrap;
         }
 
         .as_button:hover {
             background: var(--as-primary-hover);
-            box-shadow: 0 8px 20px rgba(31, 111, 139, 0.22);
+            box-shadow: 0 8px 20px rgba(43, 159, 201, 0.3);
         }
 
         .as_button:active {
@@ -241,25 +250,25 @@
         }
 
         .as_button_secondary {
-            background: #3d4a54;
+            background: #2a2a2a;
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(61, 74, 84, 0.14);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .as_button_secondary:hover {
-            background: #4a5a66;
-            box-shadow: 0 6px 16px rgba(61, 74, 84, 0.20);
+            background: #353535;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         }
 
         .as_button_danger {
             background: var(--as-danger);
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(166, 55, 55, 0.14);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
         }
 
         .as_button_danger:hover {
             background: var(--as-danger-hover);
-            box-shadow: 0 6px 16px rgba(166, 55, 55, 0.20);
+            box-shadow: 0 6px 16px rgba(231, 76, 60, 0.3);
         }
 
         .as_button_icon {
@@ -280,7 +289,7 @@
         .hint,
         .status {
             margin: 8px 0 0;
-            color: #52616b;
+            color: var(--as-muted);
             font-size: 12px;
             line-height: 1.4;
         }
@@ -309,7 +318,7 @@
             display: block;
             margin-top: 2px;
             font-size: 11px;
-            color: #52616b;
+            color: var(--as-muted);
         }
 
         .history_list {
@@ -325,7 +334,7 @@
             padding: 10px;
             border: 1px solid var(--as-border);
             border-radius: 8px;
-            background: #fbfdff;
+            background: var(--as-surface);
         }
 
         .history_title {
@@ -337,14 +346,14 @@
 
         .history_meta {
             margin: 0;
-            color: #52616b;
+            color: var(--as-muted);
             font-size: 12px;
             line-height: 1.4;
         }
 
         .empty_state {
             margin: 10px 0 0;
-            color: #52616b;
+            color: var(--as-muted);
             font-size: 12px;
         }
 
@@ -356,9 +365,9 @@
             padding: 12px 14px;
             text-align: center;
             font-size: 11px;
-            color: #5f6f7c;
+            color: var(--as-muted);
             border-top: 1px solid var(--as-border);
-            background: rgba(246, 248, 251, 0.5);
+            background: rgba(15, 15, 15, 0.5);
         }
 
         .creator_credit a {

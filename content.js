@@ -41,6 +41,8 @@
             loading: "Generating quiz...",
             chatgpt_title: "Generating with ChatGPT",
             launch_primary: "Create ActiveStudy quiz",
+            maximize: "Maximize",
+            minimize: "Minimize",
             new_quiz: "New quiz",
             next_question: "Next question",
             no_token: "Add your OpenAI API key in the extension popup or use the automatic ChatGPT mode.",
@@ -72,6 +74,8 @@
             loading: "Gerando quiz...",
             chatgpt_title: "Gerando com ChatGPT",
             launch_primary: "Criar quiz com ActiveStudy",
+            maximize: "Maximizar",
+            minimize: "Minimizar",
             new_quiz: "Novo quiz",
             next_question: "Próxima questão",
             no_token: "Adicione sua chave da OpenAI no popup da extensão ou use o modo automático com ChatGPT.",
@@ -1073,7 +1077,7 @@
         showingQuiz = true;
 
         const quizContainer = document.createElement("div");
-        quizContainer.className = "quiz_container";
+        quizContainer.className = "quiz_container quiz_minimized";
 
         const header = document.createElement("div");
         header.className = "quiz_header";
@@ -1089,6 +1093,13 @@
         title.textContent = "Quiz for YouTube";
 
         brand.append(icon, title);
+
+        const minimizeBtn = document.createElement("button");
+        minimizeBtn.type = "button";
+        minimizeBtn.className = "quiz_close_btn quiz_minimize_btn";
+        minimizeBtn.title = t("minimize");
+        window.ActiveStudyUI.setButtonContent(minimizeBtn, { icon: "mdi:chevron-down", ariaLabel: t("minimize"), title: t("minimize") });
+        minimizeBtn.onclick = () => toggleMinimize(quizContainer, minimizeBtn);
 
         const regenerateBtn = document.createElement("button");
         regenerateBtn.type = "button";
@@ -1106,7 +1117,7 @@
 
         const headerActions = document.createElement("div");
         headerActions.className = "quiz_header_actions";
-        headerActions.append(regenerateBtn, closeBtn);
+        headerActions.append(minimizeBtn, regenerateBtn, closeBtn);
 
         header.append(brand, headerActions);
 
@@ -1147,6 +1158,26 @@
         quizContainer.append(header, scroll, btnContainer);
         document.body.appendChild(quizContainer);
         if (window.Iconify) window.Iconify.scan();
+    }
+
+    function toggleMinimize(container, button) {
+        const isMinimized = container.classList.toggle("quiz_minimized");
+
+        if (isMinimized) {
+            window.ActiveStudyUI.setButtonContent(button, {
+                icon: "mdi:chevron-up",
+                ariaLabel: t("maximize"),
+                title: t("maximize")
+            });
+            button.title = t("maximize");
+        } else {
+            window.ActiveStudyUI.setButtonContent(button, {
+                icon: "mdi:chevron-down",
+                ariaLabel: t("minimize"),
+                title: t("minimize")
+            });
+            button.title = t("minimize");
+        }
     }
 
     async function showQuiz(options = {}) {
@@ -1570,9 +1601,18 @@
             jsonStr = jsonStr.replace(/,\s*([\]}])/g, "$1");
             return JSON.parse(jsonStr);
         } catch (error) {
-            const start = cleaned.indexOf("{");
-            const end = cleaned.lastIndexOf("}");
+            // Tenta extrair JSON de array ou objeto
+            let start = cleaned.indexOf("[");
+            let end = cleaned.lastIndexOf("]");
+
+            // Se não encontrar array, tenta objeto
+            if (start < 0 || end < start) {
+                start = cleaned.indexOf("{");
+                end = cleaned.lastIndexOf("}");
+            }
+
             if (start < 0 || end < start) throw error;
+
             let subStr = cleaned.slice(start, end + 1);
             subStr = subStr.replace(/,\s*([\]}])/g, "$1");
             return JSON.parse(subStr);

@@ -30,7 +30,7 @@ Quiz for YouTube uses AI to automatically generate interactive quizzes from any 
 
 🎯 Dual Generation Modes
 • OpenAI API: Use your own API key for fast, reliable generation
-• ChatGPT Mode: Free option using your ChatGPT account
+• ChatGPT Popup: Free option using your ChatGPT account
 
 ⌨️ Full Keyboard Control
 • Arrow keys (←/→) to navigate between questions
@@ -88,7 +88,7 @@ Or use the keyboard shortcut: Ctrl + Shift + Q
 
 💰 PRICING
 
-• ChatGPT Mode: FREE (requires ChatGPT account)
+• ChatGPT Popup: FREE (requires ChatGPT account)
 • OpenAI API Mode: Pay-as-you-go (minimum $5 prepaid)
   - With gpt-4o-mini: Generate thousands of quizzes
   - Full control over AI model selection
@@ -278,7 +278,7 @@ youtube, quiz, learning, education, study, ai, chatgpt, openai, test, questions,
 **Our Advantages:**
 - Dual generation modes (OpenAI + ChatGPT)
 - Full keyboard control
-- Completely free option (ChatGPT mode)
+- Completely free option (ChatGPT Popup)
 - Open source
 - Better UI/UX
 - More comprehensive statistics
@@ -301,7 +301,7 @@ youtube, quiz, learning, education, study, ai, chatgpt, openai, test, questions,
 
 Transform any YouTube video into an interactive quiz with AI.
 
-✨ Free ChatGPT mode
+✨ Free ChatGPT Popup
 ⌨️ Full keyboard control
 📊 Track your progress
 🌐 English & Portuguese
@@ -323,7 +323,7 @@ Perfect for students, educators, and lifelong learners who want to:
 
 Key features:
 ✅ Automatic quiz generation from video transcripts
-✅ Free ChatGPT mode + OpenAI API option
+✅ Free ChatGPT Popup + OpenAI API option
 ✅ Full keyboard navigation
 ✅ Detailed statistics and history
 ✅ Privacy-first design (all data local)
@@ -348,12 +348,12 @@ The extension addresses a common challenge in online learning: passive consumpti
 
 Key Features:
 • AI-powered quiz generation from any YouTube video
-• Free ChatGPT mode and OpenAI API option
+• Free ChatGPT Popup and OpenAI API option
 • Full keyboard navigation for efficient studying
 • Progress tracking and performance statistics
 • Privacy-first design with local data storage
 
-The extension is available now on the Chrome Web Store and is completely free to use with the ChatGPT mode option.
+The extension is available now on the Chrome Web Store and is completely free to use with the ChatGPT Popup option.
 
 For more information, visit: https://pablosan.netlify.app
 

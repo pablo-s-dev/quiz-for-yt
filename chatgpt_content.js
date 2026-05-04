@@ -29,8 +29,8 @@ const CHATGPT_SELECTORS = {
 };
 
 const RESPONSE_TIMEOUT_MS = 180000;
-const RESPONSE_STABLE_MS = 2200;
-const POLL_MS = 400;
+const RESPONSE_STABLE_MS = 1800;
+const POLL_MS = 300;
 
 let activeJobId = null;
 
@@ -59,21 +59,21 @@ async function runChatGptPrompt(jobId, prompt) {
 
     const beforeCount = getAssistantMessages().length;
 
-    // Pequena pausa inicial "humana"
-    await delay(1000 + Math.random() * 1000);
+    // Pausa inicial reduzida
+    await delay(400 + Math.random() * 300);
 
     const composer = await waitForAnyElement(CHATGPT_SELECTORS.composer, 45000);
 
-    // Tenta remover o modo estendido com persistência
+    // Tenta remover o modo estendido de forma mais rápida
     await removeExtendedMode();
 
-    // Mais um pequeno fôlego
-    await delay(500 + Math.random() * 500);
+    // Pausa mínima
+    await delay(200);
 
     await setComposerValue(composer, prompt);
 
-    // Pausa antes de clicar em enviar
-    await delay(800 + Math.random() * 700);
+    // Pausa antes de clicar em enviar (reduzida)
+    await delay(300 + Math.random() * 200);
 
     const sendButton = await waitForSendButton(30000);
     sendButton.click();
@@ -95,8 +95,8 @@ async function removeExtendedMode() {
 
     const specificSelector = "#thread-bottom > div > div > div > div > div.pointer-events-auto.relative.z-1.flex.h-\\(---composer-container-height\\,100\\%\\).max-w-full.flex-\\(---composer-container-flex\\,1\\).flex-col > form > div:nth-child(2) > div > div.-m-1.max-w-full.overflow-x-auto.p-1.\\[grid-area\\:footer\\].\\[scrollbar-width\\:none\\] > div > div > div > button.__composer-pill-remove";
 
-    // Tenta encontrar o botão por até 1.5 segundos (polling)
-    for (let i = 0; i < 3; i++) {
+    // Tenta encontrar o botão rapidamente (2 tentativas × 200ms)
+    for (let i = 0; i < 2; i++) {
         const btn = document.querySelector(specificSelector) ||
             document.querySelector("button.__composer-pill-remove[aria-label*='Estendido']") ||
             document.querySelector("button.__composer-pill-remove[aria-label*='Extended']");
@@ -104,11 +104,11 @@ async function removeExtendedMode() {
         if (btn) {
             console.log("[ActiveStudy] Botão 'Estendido' encontrado! Removendo...");
             btn.click();
-            await delay(800 + Math.random() * 400); // Espera a UI reagir
+            await delay(400); // Espera reduzida para a UI reagir
             return true;
         }
 
-        await delay(500); // Espera meio segundo antes da próxima tentativa
+        await delay(200); // Espera reduzida entre tentativas
     }
 
     console.log("[ActiveStudy] Modo estendido não detectado ou já removido.");
@@ -245,9 +245,18 @@ function parseJsonFromText(text) {
         jsonStr = jsonStr.replace(/,\s*([\]}])/g, "$1");
         return JSON.parse(jsonStr);
     } catch (error) {
-        const start = cleaned.indexOf("{");
-        const end = cleaned.lastIndexOf("}");
+        // Tenta extrair JSON de array ou objeto
+        let start = cleaned.indexOf("[");
+        let end = cleaned.lastIndexOf("]");
+
+        // Se não encontrar array, tenta objeto
+        if (start < 0 || end < start) {
+            start = cleaned.indexOf("{");
+            end = cleaned.lastIndexOf("}");
+        }
+
         if (start < 0 || end < start) throw error;
+
         let subStr = cleaned.slice(start, end + 1);
         subStr = subStr.replace(/,\s*([\]}])/g, "$1");
         return JSON.parse(subStr);

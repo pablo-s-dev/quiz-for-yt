@@ -396,7 +396,7 @@ localStorage.removeItem("AS_DEBUG");
 
 2. **Quiz Generation**
    - [ ] OpenAI mode works with valid API key
-   - [ ] ChatGPT mode opens tab and generates quiz
+   - [ ] ChatGPT Popup opens tab and generates quiz
    - [ ] Error handling for invalid API key
    - [ ] Error handling for no transcript
 
@@ -568,7 +568,7 @@ syncQuizLaunchButton();
 Ctrl + Shift + R
 ```
 
-### ChatGPT Mode Failing
+### ChatGPT Popup Failing
 
 **Symptoms**: "Timeout waiting for ChatGPT" error
 

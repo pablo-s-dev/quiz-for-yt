@@ -4,7 +4,7 @@ const STORAGE_KEYS = {
 };
 
 const DEFAULT_SETTINGS = {
-    generationMode: "openai",
+    generationMode: "chatgpt",
     openAiModel: "gpt-4o-mini",
     uiLanguage: "system"
 };
@@ -16,7 +16,7 @@ const I18N = {
         language_system: "Browser language",
         mode_label: "Mode",
         mode_openai: "OpenAI API with my token",
-        mode_chatgpt: "Automatic ChatGPT",
+        mode_chatgpt: "ChatGPT Popup",
         api_key_label: "OpenAI API key",
         save_token: "Save token",
         clear_token: "Remove token",
@@ -48,7 +48,7 @@ const I18N = {
         language_system: "Idioma do navegador",
         mode_label: "Modo",
         mode_openai: "API OpenAI com meu token",
-        mode_chatgpt: "ChatGPT automático",
+        mode_chatgpt: "Popup ChatGPT",
         api_key_label: "Chave da API OpenAI",
         save_token: "Salvar token",
         clear_token: "Remover token",

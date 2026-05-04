@@ -118,7 +118,7 @@ npm run build
    - Click "Save token"
    - (Optional) Change model if needed
 
-### ChatGPT Mode (Free)
+### ChatGPT Popup (Free)
 
 1. **Login to ChatGPT**
    - Go to https://chatgpt.com
@@ -127,7 +127,7 @@ npm run build
 
 2. **Configure Extension**
    - Click extension icon
-   - Select "Automatic ChatGPT"
+   - Select "ChatGPT Popup"
    - Done!
 
 ### Language Settings
@@ -208,7 +208,7 @@ npm run build
 4. Try a different model (e.g., `gpt-3.5-turbo`)
 5. Check browser console for detailed error
 
-### ChatGPT Mode Not Working
+### ChatGPT Popup Not Working
 
 **Problem**: ChatGPT automation fails
 

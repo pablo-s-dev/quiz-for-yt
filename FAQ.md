@@ -9,7 +9,7 @@ Quiz for YouTube is a Chrome extension that uses AI to automatically generate in
 ### Is it free?
 
 Yes! The extension offers two modes:
-- **ChatGPT Mode**: Completely free (requires a ChatGPT account)
+- **ChatGPT Popup**: Completely free (requires a ChatGPT account)
 - **OpenAI API Mode**: Pay-as-you-go (minimum $5 prepaid, generates thousands of quizzes)
 
 ### What languages are supported?
@@ -39,7 +39,7 @@ For detailed instructions, see [INSTALL.md](INSTALL.md).
 
 ### Do I need an OpenAI API key?
 
-No! You can use the free ChatGPT mode. The OpenAI API key is only needed if you want to use the API mode for faster, more reliable generation.
+No! You can use the free ChatGPT Popup. The OpenAI API key is only needed if you want to use the API mode for faster, more reliable generation.
 
 ### How do I get an OpenAI API key?
 
@@ -68,7 +68,7 @@ No! You can use the free ChatGPT mode. The OpenAI API key is only needed if you 
 ### How long does it take to generate a quiz?
 
 - **OpenAI API Mode**: 5-15 seconds
-- **ChatGPT Mode**: 15-30 seconds (depends on ChatGPT response time)
+- **ChatGPT Popup**: 15-30 seconds (depends on ChatGPT response time)
 
 ### Can I regenerate a quiz for the same video?
 
@@ -131,7 +131,7 @@ No, it requires an internet connection to:
 - **Default**: `gpt-4o-mini` (fast and economical)
 - **Customizable**: You can change the model in settings (e.g., `gpt-4`, `gpt-3.5-turbo`)
 
-### How does ChatGPT mode work?
+### How does ChatGPT Popup work?
 
 The extension automates your ChatGPT browser session:
 1. Opens ChatGPT in the background
@@ -178,7 +178,7 @@ Yes! The code is available on GitHub. You can review, audit, and contribute.
 3. Check OpenAI API status: https://status.openai.com
 4. Try a different model
 
-**For ChatGPT Mode**:
+**For ChatGPT Popup**:
 1. Make sure you're logged into ChatGPT
 2. Open https://chatgpt.com in a new tab first
 3. Check if ChatGPT is responding normally
@@ -239,7 +239,7 @@ No! The extension only:
 
 ### How is this different from Ulearn?
 
-- **Quiz for YouTube**: Free ChatGPT mode, full keyboard control, open source
+- **Quiz for YouTube**: Free ChatGPT Popup, full keyboard control, open source
 - **Ulearn**: Spaced repetition system, gamification features
 
 ### How is this different from QuizFirst?
@@ -249,7 +249,7 @@ No! The extension only:
 
 ### Why choose Quiz for YouTube?
 
-- ✅ Completely free option (ChatGPT mode)
+- ✅ Completely free option (ChatGPT Popup)
 - ✅ Full keyboard control
 - ✅ Open source and transparent
 - ✅ Privacy-first design

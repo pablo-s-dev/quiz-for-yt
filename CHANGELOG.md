@@ -60,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-03-XX
 
 ### Added
-- ChatGPT automatic mode (free alternative to OpenAI API)
+- ChatGPT Popup (free alternative to OpenAI API)
 - Dual generation modes (OpenAI API + ChatGPT)
 - Quiz regeneration feature
 - Settings persistence
@@ -124,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **1.3.0** (2026-05-03) - Documentation, branding, build system
 - **1.2.0** (2026-04-XX) - History, statistics, keyboard controls
-- **1.1.0** (2026-03-XX) - ChatGPT mode, dual generation
+- **1.1.0** (2026-03-XX) - ChatGPT Popup, dual generation
 - **1.0.0** (2026-02-XX) - Initial public release
 
 ---
@@ -167,7 +167,7 @@ npm install
 - No action required from users
 
 ### From 1.0.0 to 1.1.0
-- ChatGPT mode added as new option
+- ChatGPT Popup added as new option
 - Existing OpenAI API settings preserved
 - No breaking changes
 

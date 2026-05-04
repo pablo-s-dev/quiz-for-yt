@@ -24,7 +24,7 @@ We've added comprehensive documentation to help you get the most out of Quiz for
 - Added creator credit in popup
 
 ### ⚡ Performance Improvements
-- **Faster quiz generation**: Reduced ChatGPT mode startup time by 75%
+- **Faster quiz generation**: Reduced ChatGPT Popup startup time by 75%
 - ChatGPT extended mode removal now takes 1.5s instead of 6s
 - Smoother overall experience
 

@@ -89,7 +89,7 @@ quiz-for-youtube/
    - Reload extension in `chrome://extensions/`
    - Hard refresh YouTube pages (Ctrl + Shift + R)
    - Test with different videos
-   - Test both OpenAI and ChatGPT modes
+   - Test both OpenAI and ChatGPT Popup
 
 4. **Build for production**
    ```bash
@@ -101,7 +101,7 @@ quiz-for-youtube/
 - [ ] Extension loads without errors
 - [ ] Quiz button appears on YouTube videos
 - [ ] Quiz generation works (OpenAI mode)
-- [ ] Quiz generation works (ChatGPT mode)
+- [ ] Quiz generation works (ChatGPT Popup)
 - [ ] Keyboard controls work correctly
 - [ ] Quiz history saves properly
 - [ ] Language switching works
