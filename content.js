@@ -41,8 +41,6 @@
             loading: "Generating quiz...",
             chatgpt_title: "Generating with ChatGPT",
             launch_primary: "Create ActiveStudy quiz",
-            maximize: "Maximize",
-            minimize: "Minimize",
             new_quiz: "New quiz",
             next_question: "Next question",
             no_token: "Add your OpenAI API key in the extension popup or use the automatic ChatGPT mode.",
@@ -74,8 +72,6 @@
             loading: "Gerando quiz...",
             chatgpt_title: "Gerando com ChatGPT",
             launch_primary: "Criar quiz com ActiveStudy",
-            maximize: "Maximizar",
-            minimize: "Minimizar",
             new_quiz: "Novo quiz",
             next_question: "Próxima questão",
             no_token: "Adicione sua chave da OpenAI no popup da extensão ou use o modo automático com ChatGPT.",
@@ -294,13 +290,14 @@
 
     function buildQuizPrompt() {
         const isPt = lang === "pt-BR";
+        const targetLanguage = isPt ? "português" : "English";
 
         const instructions = isPt
             ? [
                 "Aja como um especialista em estudo ativo. Sua tarefa é criar um quiz de alta qualidade baseado na transcrição do vídeo fornecida.",
                 "REGRAS OBRIGATÓRIAS:",
                 "1. Responda APENAS com JSON puro. Não inclua markdown (```json), comentários ou explicações.",
-                "2. O idioma das perguntas e respostas deve ser o mesmo da transcrição.",
+                `2. O idioma das perguntas e respostas DEVE SER ${targetLanguage}, independente do idioma da transcrição.`,
                 "3. Gere pelo menos 3 perguntas objetivas e desafiadoras.",
                 "4. Cada pergunta deve ter exatamente 4 alternativas.",
                 "5. O campo 'answer' deve conter APENAS a letra (A, B, C ou D) ou o índice (0, 1, 2 ou 3) da alternativa correta.",
@@ -316,7 +313,7 @@
                 "Act as an active study expert. Your task is to create a high-quality quiz based on the provided video transcription.",
                 "MANDATORY RULES:",
                 "1. Respond ONLY with pure JSON. Do not include markdown (```json), comments, or explanations.",
-                "2. The language of questions and answers must be the same as the transcription.",
+                `2. The language of questions and answers MUST BE ${targetLanguage}, regardless of the transcription language.`,
                 "3. Generate at least 3 objective and challenging questions.",
                 "4. Each question must have exactly 4 alternatives.",
                 "5. The 'answer' field must contain ONLY the letter (A, B, C, or D) or index (0, 1, 2, or 3) of the correct alternative.",
@@ -1077,7 +1074,7 @@
         showingQuiz = true;
 
         const quizContainer = document.createElement("div");
-        quizContainer.className = "quiz_container quiz_minimized";
+        quizContainer.className = "quiz_container";
 
         const header = document.createElement("div");
         header.className = "quiz_header";
@@ -1093,13 +1090,6 @@
         title.textContent = "Quiz for YouTube";
 
         brand.append(icon, title);
-
-        const minimizeBtn = document.createElement("button");
-        minimizeBtn.type = "button";
-        minimizeBtn.className = "quiz_close_btn quiz_minimize_btn";
-        minimizeBtn.title = t("minimize");
-        window.ActiveStudyUI.setButtonContent(minimizeBtn, { icon: "mdi:chevron-down", ariaLabel: t("minimize"), title: t("minimize") });
-        minimizeBtn.onclick = () => toggleMinimize(quizContainer, minimizeBtn);
 
         const regenerateBtn = document.createElement("button");
         regenerateBtn.type = "button";
@@ -1117,7 +1107,7 @@
 
         const headerActions = document.createElement("div");
         headerActions.className = "quiz_header_actions";
-        headerActions.append(minimizeBtn, regenerateBtn, closeBtn);
+        headerActions.append(regenerateBtn, closeBtn);
 
         header.append(brand, headerActions);
 
@@ -1158,26 +1148,6 @@
         quizContainer.append(header, scroll, btnContainer);
         document.body.appendChild(quizContainer);
         if (window.Iconify) window.Iconify.scan();
-    }
-
-    function toggleMinimize(container, button) {
-        const isMinimized = container.classList.toggle("quiz_minimized");
-
-        if (isMinimized) {
-            window.ActiveStudyUI.setButtonContent(button, {
-                icon: "mdi:chevron-up",
-                ariaLabel: t("maximize"),
-                title: t("maximize")
-            });
-            button.title = t("maximize");
-        } else {
-            window.ActiveStudyUI.setButtonContent(button, {
-                icon: "mdi:chevron-down",
-                ariaLabel: t("minimize"),
-                title: t("minimize")
-            });
-            button.title = t("minimize");
-        }
     }
 
     async function showQuiz(options = {}) {
