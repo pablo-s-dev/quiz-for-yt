@@ -5,6 +5,63 @@ All notable changes to Quiz for YouTube will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-05-04
+
+### Added
+- **Settings button in quiz interface**
+  - Quick access to extension settings from quiz popup
+  - Opens extension popup.html directly
+- **Enhanced JSON parsing and validation**
+  - Strict validation for quiz structure
+  - Validates question format, alternatives count, and answer format
+  - Better error messages for invalid quiz data
+- **Comprehensive debug logging**
+  - Detailed logs for ChatGPT response capture
+  - JSON parsing step-by-step logging
+  - Response length and content preview logs
+- **Dark mode scrollbars**
+  - Styled scrollbars for quiz popup
+  - Styled scrollbars for extension popup
+  - Consistent dark theme throughout
+
+### Changed
+- **Quiz generation language enforcement**
+  - Quiz now generates in user's selected language regardless of video transcript language
+  - Updated prompts to explicitly specify target language
+- **ChatGPT popup positioning**
+  - Reduced size: 560x780px → 420x600px
+  - Positioned on left side of screen (left: 0, top: 100)
+  - No longer overlaps with quiz popup
+- **Default generation mode**
+  - Changed from OpenAI API to ChatGPT Popup as default
+- **Improved ChatGPT automation speed**
+  - 60-70% faster quiz generation
+  - Reduced initial delay: 1-2s → 0.4-0.7s
+  - Reduced extended mode check: 1.5s → 0.4s
+  - Faster polling: 400ms → 300ms
+  - Faster stability check: 2.2s → 1.8s
+- **Unified JSON format**
+  - Both OpenAI API and ChatGPT Popup now use array format `[...]`
+  - Removed support for `{"questions": [...]}` format
+  - Consistent parsing logic across all generation methods
+
+### Fixed
+- **JSON parsing for arrays**
+  - Fixed parser to correctly extract array-based quiz JSON
+  - Handles text before/after JSON properly
+  - Better error recovery for malformed JSON
+- **Language selector clarity**
+  - Changed "System" to "Browser language" for better understanding
+- **Icon display issues**
+  - Fixed icon display property being overridden
+  - Added inline styles to ensure proper rendering
+
+### Security
+- **Bot detection avoidance**
+  - ChatGPT popup stays visible during generation
+  - Natural interaction pattern to avoid anti-bot mechanisms
+  - Only minimizes after quiz generation completes
+
 ## [1.3.0] - 2026-05-03
 
 ### Added

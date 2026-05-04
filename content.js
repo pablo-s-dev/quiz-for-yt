@@ -52,6 +52,7 @@
             right: "Right",
             saved: "Quiz saved.",
             send: "Send",
+            settings: "Settings",
             submit_answer: "Submit answer",
             use_response: "Use response",
             video_title: "Video Title"
@@ -83,6 +84,7 @@
             right: "Direita",
             saved: "Quiz salvo.",
             send: "Enviar",
+            settings: "Configurações",
             submit_answer: "Enviar resposta",
             use_response: "Usar resposta",
             video_title: "Título do Vídeo"
@@ -958,6 +960,10 @@
         quizContainer?.remove();
     }
 
+    function openExtensionSettings() {
+        chrome.runtime.sendMessage({ request: "openExtensionPopup" });
+    }
+
     function updateAlternativeFocus() {
         const alternatives = document.querySelectorAll(".alternative_wrapper");
         alternatives.forEach((alt, index) => {
@@ -1091,6 +1097,13 @@
 
         brand.append(icon, title);
 
+        const settingsBtn = document.createElement("button");
+        settingsBtn.type = "button";
+        settingsBtn.className = "quiz_close_btn quiz_settings_btn";
+        settingsBtn.title = t("settings");
+        window.ActiveStudyUI.setButtonContent(settingsBtn, { icon: "mdi:cog", ariaLabel: t("settings"), title: t("settings") });
+        settingsBtn.onclick = openExtensionSettings;
+
         const regenerateBtn = document.createElement("button");
         regenerateBtn.type = "button";
         regenerateBtn.className = "quiz_close_btn quiz_regenerate_btn";
@@ -1107,7 +1120,7 @@
 
         const headerActions = document.createElement("div");
         headerActions.className = "quiz_header_actions";
-        headerActions.append(regenerateBtn, closeBtn);
+        headerActions.append(settingsBtn, regenerateBtn, closeBtn);
 
         header.append(brand, headerActions);
 
@@ -1559,6 +1572,10 @@
     }
 
     function parseQuizText(text) {
+        console.log(`[ActiveStudy Content] Parsing quiz JSON, length: ${text.length} chars`);
+        console.log(`[ActiveStudy Content] First 300 chars:`, text.substring(0, 300));
+        console.log(`[ActiveStudy Content] Last 300 chars:`, text.substring(text.length - 300));
+
         const cleaned = text
             .trim()
             .replace(/^```json\s*/i, "")
@@ -1569,8 +1586,12 @@
         try {
             let jsonStr = cleaned;
             jsonStr = jsonStr.replace(/,\s*([\]}])/g, "$1");
-            return JSON.parse(jsonStr);
+            const parsed = JSON.parse(jsonStr);
+            console.log(`[ActiveStudy Content] Successfully parsed, ${Array.isArray(parsed) ? parsed.length : 'N/A'} questions`);
+            return parsed;
         } catch (error) {
+            console.log(`[ActiveStudy Content] Direct parse failed: ${error.message}`);
+
             // Tenta extrair JSON de array ou objeto
             let start = cleaned.indexOf("[");
             let end = cleaned.lastIndexOf("]");
@@ -1581,11 +1602,18 @@
                 end = cleaned.lastIndexOf("}");
             }
 
-            if (start < 0 || end < start) throw error;
+            if (start < 0 || end < start) {
+                console.error(`[ActiveStudy Content] Could not find JSON boundaries`);
+                throw error;
+            }
 
             let subStr = cleaned.slice(start, end + 1);
+            console.log(`[ActiveStudy Content] Extracted from ${start} to ${end + 1}`);
+
             subStr = subStr.replace(/,\s*([\]}])/g, "$1");
-            return JSON.parse(subStr);
+            const parsed = JSON.parse(subStr);
+            console.log(`[ActiveStudy Content] Successfully parsed extracted JSON, ${Array.isArray(parsed) ? parsed.length : 'N/A'} questions`);
+            return parsed;
         }
     }
 

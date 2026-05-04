@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Quiz for YouTube",
 	"description": "AI-powered quiz generator for YouTube videos. Test your knowledge with automatically generated questions from any video.",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"permissions": [
 		"storage",
 		"activeTab"

@@ -13,30 +13,23 @@ const CHATGPT_PROMPT_RETRY_ATTEMPTS = 80;
 const CHATGPT_PROMPT_RETRY_DELAY_MS = 500;
 
 const QUIZ_RESPONSE_SCHEMA = {
-    type: "object",
-    additionalProperties: false,
-    properties: {
-        questions: {
-            type: "array",
-            minItems: 3,
-            items: {
-                type: "object",
-                additionalProperties: false,
-                properties: {
-                    question: { type: "string" },
-                    alternatives: {
-                        type: "array",
-                        minItems: 4,
-                        maxItems: 4,
-                        items: { type: "string" }
-                    },
-                    answer: { type: "string" }
-                },
-                required: ["question", "alternatives", "answer"]
-            }
-        }
-    },
-    required: ["questions"]
+    type: "array",
+    minItems: 3,
+    items: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+            question: { type: "string" },
+            alternatives: {
+                type: "array",
+                minItems: 4,
+                maxItems: 4,
+                items: { type: "string" }
+            },
+            answer: { type: "string" }
+        },
+        required: ["question", "alternatives", "answer"]
+    }
 };
 
 const chatGptJobs = new Map();
@@ -88,6 +81,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.request === "minimizeChatGptPopup") {
         minimizeChatGptPopup(message.windowId)
             .then(sendResponse)
+            .catch((error) => sendResponse({ ok: false, error: error.message }));
+        return true;
+    }
+
+    if (message.request === "openExtensionPopup") {
+        chrome.action.openPopup()
+            .then(() => sendResponse({ ok: true }))
             .catch((error) => sendResponse({ ok: false, error: error.message }));
         return true;
     }
@@ -157,9 +157,10 @@ async function generateQuizWithOpenAI(prompt) {
     }
 
     try {
-        return { ok: true, quiz: parseJsonFromText(content) };
+        const quiz = validateQuizArray(parseJsonFromText(content));
+        return { ok: true, quiz };
     } catch (error) {
-        return { ok: false, error: "Nao foi possivel interpretar o JSON retornado pela OpenAI." };
+        return { ok: false, error: `Nao foi possivel interpretar o JSON retornado pela OpenAI: ${error.message}` };
     }
 }
 
@@ -304,11 +305,21 @@ async function getGenerationSettings() {
 }
 
 async function openChatGptPopup() {
+    // Dimensões menores para o popup
+    const width = 420;
+    const height = 600;
+
+    // Posiciona no lado esquerdo da tela
+    const left = 0;
+    const top = 100;
+
     const createdWindow = await chrome.windows.create({
         url: CHATGPT_URL,
         type: "popup",
-        width: 560,
-        height: 780,
+        width: width,
+        height: height,
+        left: left,
+        top: top,
         focused: true
     });
 
@@ -407,13 +418,54 @@ function parseJsonFromText(text) {
         jsonStr = jsonStr.replace(/,\s*([\]}])/g, "$1");
         return JSON.parse(jsonStr);
     } catch (error) {
-        const start = cleaned.indexOf("{");
-        const end = cleaned.lastIndexOf("}");
+        // Tenta extrair apenas arrays
+        const start = cleaned.indexOf("[");
+        const end = cleaned.lastIndexOf("]");
+
         if (start < 0 || end < start) throw error;
+
         let subStr = cleaned.slice(start, end + 1);
         subStr = subStr.replace(/,\s*([\]}])/g, "$1");
         return JSON.parse(subStr);
     }
+}
+
+function validateQuizArray(parsed) {
+    if (!Array.isArray(parsed)) {
+        throw new Error("Quiz JSON precisa ser um array no topo.");
+    }
+
+    if (parsed.length < 3) {
+        throw new Error("Quiz precisa ter pelo menos 3 perguntas.");
+    }
+
+    for (const q of parsed) {
+        if (!q || typeof q !== "object") {
+            throw new Error("Cada pergunta precisa ser um objeto.");
+        }
+
+        if (typeof q.question !== "string" || !q.question.trim()) {
+            throw new Error("Pergunta invalida.");
+        }
+
+        if (!Array.isArray(q.alternatives) || q.alternatives.length !== 4) {
+            throw new Error("Cada pergunta precisa ter exatamente 4 alternativas.");
+        }
+
+        if (!q.alternatives.every((a) => typeof a === "string" && a.trim())) {
+            throw new Error("Alternativas invalidas.");
+        }
+
+        const answer = String(q.answer || "").trim();
+        const validLetter = ["A", "B", "C", "D"].includes(answer);
+        const validIndex = ["0", "1", "2", "3"].includes(answer);
+
+        if (!validLetter && !validIndex) {
+            throw new Error("Resposta precisa ser A, B, C, D ou 0, 1, 2, 3.");
+        }
+    }
+
+    return parsed;
 }
 
 function createJobId() {

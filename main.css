@@ -140,23 +140,29 @@ ytd-app[dark] .activestudy_launch_btn {
 	position: relative;
 }
 
+.quiz_container .quiz_scroll::-webkit-scrollbar {
+	width: 10px;
+}
+
+.quiz_container .quiz_scroll::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 5px;
+}
+
+.quiz_container .quiz_scroll::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 5px;
+	border: 2px solid rgba(20, 20, 20, 1);
+}
+
+.quiz_container .quiz_scroll::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
 .quiz_container *,
 .quiz_container *::before,
 .quiz_container *::after {
 	box-sizing: border-box;
-}
-
-.quiz_container::-webkit-scrollbar {
-	width: 1em;
-}
-
-.quiz_container::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
-.quiz_container::-webkit-scrollbar-thumb {
-	background-color: rgb(17, 17, 17);
-	outline: 1px solid rgb(34, 34, 34);
 }
 
 .quiz_container .quiz_close_btn {

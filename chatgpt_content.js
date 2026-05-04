@@ -173,21 +173,36 @@ async function waitForAssistantResponse(beforeCount) {
         if (text !== lastText) {
             lastText = text;
             stableSince = Date.now();
+            console.log(`[ActiveStudy] Response updated, length: ${text.length} chars`);
         }
 
         const stable = Date.now() - stableSince >= RESPONSE_STABLE_MS;
         if (text && stable && !isChatGptStreaming()) {
-            return text;
+            if (looksLikeQuizJson(text)) {
+                console.log(`[ActiveStudy] Response complete and stable`);
+                console.log(`[ActiveStudy] Full response length: ${text.length} chars`);
+                console.log(`[ActiveStudy] First 200 chars: ${text.substring(0, 200)}`);
+                console.log(`[ActiveStudy] Last 200 chars: ${text.substring(text.length - 200)}`);
+                return text;
+            }
+            console.warn(`[ActiveStudy] Response finished but is not valid quiz JSON`);
         }
 
         if (text && stable && looksLikeQuizJson(text)) {
+            console.log(`[ActiveStudy] Valid quiz JSON detected early`);
+            console.log(`[ActiveStudy] Full response length: ${text.length} chars`);
+            console.log(`[ActiveStudy] First 200 chars: ${text.substring(0, 200)}`);
+            console.log(`[ActiveStudy] Last 200 chars: ${text.substring(text.length - 200)}`);
             return text;
         }
 
         await delay(POLL_MS);
     }
 
-    if (lastText) return lastText;
+    if (lastText) {
+        console.warn(`[ActiveStudy] Timeout but returning last text, length: ${lastText.length} chars`);
+        return lastText;
+    }
     throw new Error("Timeout esperando a resposta do ChatGPT.");
 }
 
@@ -225,13 +240,34 @@ function isChatGptStreaming() {
 function looksLikeQuizJson(text) {
     try {
         const parsed = parseJsonFromText(text);
-        return Array.isArray(parsed);
+
+        // Deve ser um array
+        if (!Array.isArray(parsed)) return false;
+
+        // Deve ter pelo menos 3 perguntas
+        if (parsed.length < 3) return false;
+
+        // Valida estrutura básica de cada pergunta
+        return parsed.every((q) => {
+            if (!q || typeof q !== "object") return false;
+            if (typeof q.question !== "string" || !q.question.trim()) return false;
+            if (!Array.isArray(q.alternatives) || q.alternatives.length !== 4) return false;
+            if (!q.alternatives.every((a) => typeof a === "string" && a.trim())) return false;
+
+            const answer = String(q.answer || "").trim();
+            const validLetter = ["A", "B", "C", "D"].includes(answer);
+            const validIndex = ["0", "1", "2", "3"].includes(answer);
+
+            return validLetter || validIndex;
+        });
     } catch (error) {
         return false;
     }
 }
 
 function parseJsonFromText(text) {
+    console.log(`[ActiveStudy] Parsing JSON from text, length: ${text.length} chars`);
+
     const cleaned = text
         .trim()
         .replace(/^```json\s*/i, "")
@@ -239,12 +275,19 @@ function parseJsonFromText(text) {
         .replace(/```$/i, "")
         .trim();
 
+    console.log(`[ActiveStudy] After cleaning, length: ${cleaned.length} chars`);
+
     try {
         let jsonStr = cleaned;
         // Fix trailing commas
         jsonStr = jsonStr.replace(/,\s*([\]}])/g, "$1");
-        return JSON.parse(jsonStr);
+        const parsed = JSON.parse(jsonStr);
+        console.log(`[ActiveStudy] Successfully parsed JSON directly`);
+        return parsed;
     } catch (error) {
+        console.log(`[ActiveStudy] Direct parse failed: ${error.message}`);
+        console.log(`[ActiveStudy] Attempting to extract JSON from text...`);
+
         // Tenta extrair JSON de array ou objeto
         let start = cleaned.indexOf("[");
         let end = cleaned.lastIndexOf("]");
@@ -255,11 +298,18 @@ function parseJsonFromText(text) {
             end = cleaned.lastIndexOf("}");
         }
 
-        if (start < 0 || end < start) throw error;
+        if (start < 0 || end < start) {
+            console.error(`[ActiveStudy] Could not find JSON boundaries`);
+            throw error;
+        }
 
         let subStr = cleaned.slice(start, end + 1);
+        console.log(`[ActiveStudy] Extracted substring from ${start} to ${end + 1}, length: ${subStr.length}`);
+
         subStr = subStr.replace(/,\s*([\]}])/g, "$1");
-        return JSON.parse(subStr);
+        const parsed = JSON.parse(subStr);
+        console.log(`[ActiveStudy] Successfully parsed extracted JSON`);
+        return parsed;
     }
 }
 
