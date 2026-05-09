@@ -20,11 +20,6 @@ const CHATGPT_SELECTORS = {
     assistantMessage: [
         "[data-message-author-role='assistant']",
         "[data-testid*='conversation-turn'] [data-message-author-role='assistant']"
-    ],
-    extendedModePill: [
-        "button.__composer-pill-remove[aria-label*='Estendido']",
-        "button.__composer-pill-remove[aria-label*='Extended']",
-        "#thread-bottom button.__composer-pill-remove"
     ]
 };
 
@@ -64,9 +59,6 @@ async function runChatGptPrompt(jobId, prompt) {
 
     const composer = await waitForAnyElement(CHATGPT_SELECTORS.composer, 45000);
 
-    // Tenta remover o modo estendido de forma mais rápida
-    await removeExtendedMode();
-
     // Pausa mínima
     await delay(200);
 
@@ -88,31 +80,6 @@ async function runChatGptPrompt(jobId, prompt) {
 
 function notifyReady() {
     chrome.runtime.sendMessage({ request: "chatGptTabReady" });
-}
-
-async function removeExtendedMode() {
-    console.log("[ActiveStudy] Monitorando modo estendido...");
-
-    const specificSelector = "#thread-bottom > div > div > div > div > div.pointer-events-auto.relative.z-1.flex.h-\\(---composer-container-height\\,100\\%\\).max-w-full.flex-\\(---composer-container-flex\\,1\\).flex-col > form > div:nth-child(2) > div > div.-m-1.max-w-full.overflow-x-auto.p-1.\\[grid-area\\:footer\\].\\[scrollbar-width\\:none\\] > div > div > div > button.__composer-pill-remove";
-
-    // Tenta encontrar o botão rapidamente (2 tentativas × 200ms)
-    for (let i = 0; i < 2; i++) {
-        const btn = document.querySelector(specificSelector) ||
-            document.querySelector("button.__composer-pill-remove[aria-label*='Estendido']") ||
-            document.querySelector("button.__composer-pill-remove[aria-label*='Extended']");
-
-        if (btn) {
-            console.log("[ActiveStudy] Botão 'Estendido' encontrado! Removendo...");
-            btn.click();
-            await delay(400); // Espera reduzida para a UI reagir
-            return true;
-        }
-
-        await delay(200); // Espera reduzida entre tentativas
-    }
-
-    console.log("[ActiveStudy] Modo estendido não detectado ou já removido.");
-    return false;
 }
 
 async function setComposerValue(composer, prompt) {

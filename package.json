@@ -1,21 +1,21 @@
 {
-    "name": "quiz-for-youtube",
-    "version": "1.4.0",
-    "description": "AI-powered quiz generator for YouTube videos",
-    "scripts": {
-        "build": "node build.js"
-    },
-    "keywords": [
-        "youtube",
-        "quiz",
-        "education",
-        "learning",
-        "chrome-extension",
-        "ai"
-    ],
-    "author": "PabloS",
-    "license": "MIT",
-    "devDependencies": {
-        "archiver": "^7.0.1"
-    }
+  "name": "quiz-for-youtube",
+  "version": "1.4.1",
+  "description": "AI-powered quiz generator for YouTube videos",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "youtube",
+    "quiz",
+    "education",
+    "learning",
+    "chrome-extension",
+    "ai"
+  ],
+  "author": "PabloS",
+  "license": "MIT",
+  "devDependencies": {
+    "archiver": "^7.0.1"
+  }
 }

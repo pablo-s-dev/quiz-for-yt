@@ -158,7 +158,6 @@ async function sendPromptToChatGpt(tabId, jobId, prompt)
 
 **Key Features**:
 - Waits for ChatGPT UI to load
-- Removes "Extended mode" pill automatically
 - Types prompt into composer
 - Waits for response with stability detection
 - Extracts JSON from response
@@ -176,8 +175,7 @@ const CHATGPT_SELECTORS = {
     composer: ["#prompt-textarea", ...],
     sendButton: ["button[data-testid='send-button']", ...],
     stopButton: ["button[data-testid='stop-button']", ...],
-    assistantMessage: ["[data-message-author-role='assistant']", ...],
-    extendedModePill: ["button.__composer-pill-remove", ...]
+    assistantMessage: ["[data-message-author-role='assistant']", ...]
 };
 ```
 
@@ -575,7 +573,6 @@ Ctrl + Shift + R
 **Causes**:
 1. Not logged into ChatGPT
 2. ChatGPT UI changed
-3. Extended mode pill not removed
 
 **Solutions**:
 1. Open [chatgpt.com](https://chatgpt.com) and log in
