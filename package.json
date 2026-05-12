@@ -1,6 +1,6 @@
 {
   "name": "quiz-for-youtube",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "AI-powered quiz generator for YouTube videos",
   "scripts": {
     "build": "node build.js"

@@ -54,6 +54,7 @@
             send: "Send",
             settings: "Settings",
             submit_answer: "Submit answer",
+            timed_out: "Timed out.",
             use_response: "Use response",
             video_title: "Video Title"
         },
@@ -86,6 +87,7 @@
             send: "Enviar",
             settings: "Configurações",
             submit_answer: "Enviar resposta",
+            timed_out: "Tempo esgotado.",
             use_response: "Usar resposta",
             video_title: "Título do Vídeo"
         }
@@ -116,6 +118,20 @@
 
     function t(key) {
         return (textContent[lang] || textContent["en-US"])[key] || key;
+    }
+
+    function getUserFacingErrorMessage(error, fallbackKey = "api_error") {
+        const message = typeof error === "string" ? error : error?.message;
+        const publicMessage = typeof error === "object" ? error?.publicMessage : "";
+        if (publicMessage) return publicMessage;
+        if (/^Timed out waiting for\b/i.test(message || "")) return t("timed_out");
+        return message || t(fallbackKey);
+    }
+
+    function createTimeoutError(detail) {
+        const error = new Error(`Timed out waiting for ${detail}`);
+        error.publicMessage = t("timed_out");
+        return error;
     }
 
     function isExtensionContextValid() {
@@ -398,7 +414,8 @@
                 await saveQuizRecord(questions, currentQuizSource, { newGeneration: true });
                 return { ok: true, questions };
             } catch (error) {
-                return { ok: false, error: error.message || t("chatgpt_timeout") };
+                console.error("[ActiveStudy] ChatGPT generation failed:", error);
+                return { ok: false, error: getUserFacingErrorMessage(error, "chatgpt_timeout") };
             }
         }
 
@@ -414,6 +431,7 @@
             await saveQuizRecord(questions, currentQuizSource, { newGeneration: true });
             return { ok: true, questions };
         } catch (error) {
+            console.error("[ActiveStudy] OpenAI quiz generation failed:", error);
             try {
                 const generatedQuestions = await generateQuizWithChatGpt();
                 questions = generatedQuestions;
@@ -422,7 +440,8 @@
                 await saveQuizRecord(questions, currentQuizSource, { newGeneration: true });
                 return { ok: true, questions };
             } catch (chatGptError) {
-                return { ok: false, error: chatGptError.message || error.message || t("no_token") };
+                console.error("[ActiveStudy] ChatGPT fallback generation failed:", chatGptError);
+                return { ok: false, error: getUserFacingErrorMessage(chatGptError, "chatgpt_timeout") || getUserFacingErrorMessage(error, "no_token") };
             }
         }
     }
@@ -598,7 +617,7 @@
 
             const timeoutId = setTimeout(() => {
                 observer.disconnect();
-                reject(new Error(`Timed out waiting for ${selector}`));
+                reject(createTimeoutError(selector));
             }, timeoutMs);
 
             const observer = new MutationObserver(() => {
@@ -627,7 +646,7 @@
 
             const timeoutId = setTimeout(() => {
                 observer.disconnect();
-                reject(new Error(`Timed out waiting for ${selectors.join(", ")}`));
+                reject(createTimeoutError(selectors.join(", ")));
             }, timeoutMs);
 
             const observer = new MutationObserver(() => {
@@ -649,6 +668,51 @@
     function isWatchPage() {
         const url = new URL(window.location.href);
         return url.pathname === "/watch" && Boolean(getCurrentVideoId());
+    }
+
+    function getLoadedWatchVideoId() {
+        const watchFlexy = document.querySelector("ytd-watch-flexy");
+        const flexyVideoId = watchFlexy?.getAttribute("video-id");
+        if (flexyVideoId) return flexyVideoId;
+
+        try {
+            const playerResponse = window.ytInitialPlayerResponse;
+            return playerResponse?.videoDetails?.videoId || "";
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function getLoadedPlayerResponse(videoId) {
+        try {
+            const playerResponse = window.ytInitialPlayerResponse;
+            if (playerResponse?.videoDetails?.videoId === videoId) return playerResponse;
+        } catch (e) {
+            return null;
+        }
+
+        return null;
+    }
+
+    function isWatchVideoLoaded(videoId) {
+        if (!videoId) return false;
+
+        const loadedVideoId = getLoadedWatchVideoId();
+        if (loadedVideoId && loadedVideoId !== videoId) return false;
+
+        const playerResponse = getLoadedPlayerResponse(videoId);
+        const playabilityStatus = playerResponse?.playabilityStatus?.status;
+        if (playabilityStatus && playabilityStatus !== "OK") {
+            asLog("Watch player is not playable; hiding launch button.", { videoId, playabilityStatus });
+            return false;
+        }
+
+        const metadata = document.querySelector("ytd-watch-metadata");
+        const title = metadata?.querySelector("h1") ||
+            document.querySelector("h1.ytd-watch-metadata") ||
+            document.querySelector("#title h1");
+
+        return Boolean(loadedVideoId === videoId && metadata && isAnchorReady(title));
     }
 
     function queryDeep(selector, root = document) {
@@ -747,6 +811,18 @@
                 return;
             }
 
+            if (!isWatchVideoLoaded(videoId)) {
+                if (existingMount) existingMount.remove();
+                if (launchButtonRetryCount < 25) {
+                    asLog("Watch video is not loaded yet; delaying launch button.", { videoId, loadedVideoId: getLoadedWatchVideoId() });
+                    launchButtonRetryCount += 1;
+                    scheduleSyncQuizLaunchButton(700);
+                } else {
+                    asLog("Watch video never reported a loaded state; launch button will stay hidden.", { videoId });
+                }
+                return;
+            }
+
             await refreshLangFromSettings();
             if (existingMount) {
                 if (!existingMount.isConnected) {
@@ -777,9 +853,8 @@
                     return;
                 }
 
-                console.warn("[ActiveStudy] No stable anchor found. Using fallback.");
-                anchor = document.body;
-                method = "prepend";
+                console.warn("[ActiveStudy] No stable YouTube metadata anchor found. Launch button will stay hidden.", { videoId });
+                return;
             } else {
                 method = getPreferredInsertMethod(anchor);
                 console.log(`[ActiveStudy] Injecting into: ${anchor.tagName}${anchor.id ? '#' + anchor.id : ''} via ${method}`);
@@ -934,11 +1009,12 @@
             if (message.request === "chatGptQuizError") {
                 const pendingJob = pendingChatGptJobs.get(message.jobId);
                 const error = new Error(message.error || t("chatgpt_timeout"));
+                console.error("[ActiveStudy] ChatGPT automation reported an error:", error);
                 if (pendingJob) {
                     pendingChatGptJobs.delete(message.jobId);
                     pendingJob.reject(error);
                 }
-                showChatGptAutomationStatus(error.message);
+                showChatGptAutomationStatus(getUserFacingErrorMessage(error, "chatgpt_timeout"));
                 sendResponse({ ok: true });
                 return;
             }
@@ -1222,7 +1298,8 @@
             await grabVidInfo(forceNew);
             await showQuiz({ forceNew });
         } catch (error) {
-            renderError(error.message || t("api_error"));
+            console.error("[ActiveStudy] Quiz creation failed:", error);
+            renderError(getUserFacingErrorMessage(error, "api_error"));
         } finally {
             pressing = false;
         }
@@ -1235,7 +1312,8 @@
             await grabVidInfo(true);
             await generateAndRenderWithChatGpt();
         } catch (error) {
-            renderError(error.message || t("chatgpt_timeout"));
+            console.error("[ActiveStudy] ChatGPT quiz creation failed:", error);
+            renderError(getUserFacingErrorMessage(error, "chatgpt_timeout"));
         } finally {
             pressing = false;
         }
@@ -1250,7 +1328,8 @@
             await saveQuizRecord(questions, currentQuizSource, { newGeneration: true });
             renderQuestion();
         } catch (error) {
-            renderError(error.message || t("chatgpt_timeout"));
+            console.error("[ActiveStudy] ChatGPT render flow failed:", error);
+            renderError(getUserFacingErrorMessage(error, "chatgpt_timeout"));
         }
     }
 
@@ -1380,6 +1459,11 @@
         const scroll = document.querySelector(".quiz_scroll");
         if (!scroll) return;
 
+        const visibleMessage = getUserFacingErrorMessage(message, "api_error");
+        if (visibleMessage !== message) {
+            console.error("[ActiveStudy] Showing simplified error message.", { visibleMessage, originalMessage: message });
+        }
+
         scroll.innerHTML = "";
 
         const errorBox = document.createElement("div");
@@ -1392,7 +1476,7 @@
 
         const text = document.createElement("p");
         text.className = "quiz_error_text";
-        text.textContent = message;
+        text.textContent = visibleMessage;
 
         errorBox.append(iconWrapper, text);
         scroll.appendChild(errorBox);
